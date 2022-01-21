@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# env variables
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*mkbvo!qv!ej7$c8b4o^yz8&@gln*9(x%(-89mdnl3r4a_!32q'
+SECRET_KEY = env('DJ_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,10 +89,10 @@ CORS_ORIGIN_WHITELIST = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'nfteeshirtsdb',
-        'USER': 'johnnydrama',
-        'PASSWORD': 'cmonbabybro1',
-        'HOST': 'localhost',
+        'NAME': env('DB_NAME_DEV'),
+        'USER': env('DB_USER_DEV'),
+        'PASSWORD': env('DB_PW_DEV'),
+        'HOST': env('DB_HOST_DEV'),
         'PORT': '',
     }
 }
