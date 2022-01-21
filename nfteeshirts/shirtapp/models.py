@@ -17,6 +17,7 @@ class Shirt(models.Model):
     back_img_url = models.CharField(max_length=100)
     price = models.IntegerField(default=20)
     available = models.BooleanField(default=True)
+    hex = models.CharField(max_length=10, default='#FFFFFF')
 
     def __str__(self):
         return self.name

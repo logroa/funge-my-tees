@@ -5,7 +5,6 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
-    background-color: #7393b3;
 }
 
 .shirtimages {
@@ -13,10 +12,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 20px;
+}
+
+.shirtbox {
+    width: 50%;  
 }
 
 .shirtpic {
-    max-width: 40%;
+    max-width: 80%;
     height: auto;
 }

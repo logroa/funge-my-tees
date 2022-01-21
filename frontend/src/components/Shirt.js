@@ -13,6 +13,7 @@ class Shirt extends React.Component {
             back_img_url: '',
             price: 0,
             available: true,
+            hex: ''
         };
         // will add functionality for picking shirt
     }
@@ -25,25 +26,36 @@ class Shirt extends React.Component {
             front_img_url: shirt_rep.front_img_url,
             back_img_url: shirt_rep.back_img_url,
             price: shirt_rep.price,
-            available: shirt_rep.available
+            available: shirt_rep.available,
+            hex: shirt_rep.hex
         });
     };
 
     render() {
-        const { id, name, front_img_url, back_img_url, price, available } = this.state;
+        const { id, name, front_img_url, back_img_url, price, available, hex } = this.state;
 
         let front = "/images/".concat(front_img_url);
         let back = "/images/".concat(back_img_url);
 
+        const shirtstyle = {
+            backgroundColor: hex
+        }
+
         return (
-            <div className='shirt'>
+            <div className='shirt' style={shirtstyle}>
                 <div className='shirttext'>
                     <p>{name}</p>
                     <p>${price}</p>
                 </div>
                 <div className='shirtimages'>
-                    <img src={front} alt={front} className='shirtpic'/>
-                    <img src={back} alt="Back IMG" className='shirtpic'/>
+                    <div className='shirtbox'>
+                        <img src={front} alt={front} className='shirtpic'/>
+                        <p>Front</p>
+                    </div>
+                    <div className='shirtbox'>
+                        <img src={back} alt="Back IMG" className='shirtpic'/>
+                        <p>Back</p>
+                    </div>
                 </div>
             </div>
         );

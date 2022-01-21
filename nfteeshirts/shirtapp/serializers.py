@@ -18,6 +18,7 @@ class ShirtSerializer(serializers.ModelSerializer):
     back_img_url = serializers.CharField(max_length=100)
     price = serializers.IntegerField(default=20)
     available = serializers.BooleanField(default=True)
+    hex = serializers.CharField(max_length=10)
 
     class Meta:
         model = Shirt
