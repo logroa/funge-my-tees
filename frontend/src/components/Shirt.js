@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import './Shirt.css';
 
 
 class Shirt extends React.Component {
@@ -36,10 +37,14 @@ class Shirt extends React.Component {
 
         return (
             <div className='shirt'>
-                <p>{name}</p>
-                <p>${price}</p>
-                <img src={front} alt={front} />
-                <img src={back} alt="Back IMG" />
+                <div className='shirttext'>
+                    <p>{name}</p>
+                    <p>${price}</p>
+                </div>
+                <div className='shirtimages'>
+                    <img src={front} alt={front} className='shirtpic'/>
+                    <img src={back} alt="Back IMG" className='shirtpic'/>
+                </div>
             </div>
         );
     }

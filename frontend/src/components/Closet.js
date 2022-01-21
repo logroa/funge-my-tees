@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Shirt from './Shirt';
+import './Closet.css';
 
 
 class Closet extends React.Component {
@@ -42,7 +43,7 @@ class Closet extends React.Component {
         );
 
         return (
-            <div>
+            <div className='closet'>
                 {rendered_shirts}
             </div>
         );

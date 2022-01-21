@@ -1,0 +1,22 @@
+.shirt {
+    width: 100vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #7393b3;
+}
+
+.shirtimages {
+    width: 40vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.shirtpic {
+    max-width: 40%;
+    height: auto;
+}
