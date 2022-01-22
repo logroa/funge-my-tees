@@ -23,8 +23,10 @@ class Shirt extends React.Component {
         this.setState({
             id: shirt_rep.id,
             name: shirt_rep.name,
-            front_img_url: shirt_rep.front_img_url,
-            back_img_url: shirt_rep.back_img_url,
+            pic1_img_url: shirt_rep.pic1_img_url,
+            pic1_title: shirt_rep.pic1_title,
+            pic2_img_url: shirt_rep.pic2_img_url,
+            pic2_title: shirt_rep.pic2_title,
             price: shirt_rep.price,
             available: shirt_rep.available,
             hex: shirt_rep.hex
@@ -32,10 +34,10 @@ class Shirt extends React.Component {
     };
 
     render() {
-        const { id, name, front_img_url, back_img_url, price, available, hex } = this.state;
+        const { id, name, pic1_img_url, pic1_title, pic2_img_url, pic2_title, price, available, hex } = this.state;
 
-        let front = "/images/".concat(front_img_url);
-        let back = "/images/".concat(back_img_url);
+        let p1_url = "/images/".concat(pic1_img_url);
+        let p2_url = "/images/".concat(pic2_img_url);
 
         const shirtstyle = {
             backgroundColor: hex
@@ -49,12 +51,12 @@ class Shirt extends React.Component {
                 </div>
                 <div className='shirtimages'>
                     <div className='shirtbox'>
-                        <img src={front} alt={front} className='shirtpic'/>
-                        <p>Front</p>
+                        <img src={p1_url} alt={p1_url} className='shirtpic'/>
+                        <p>{pic1_title}</p>
                     </div>
                     <div className='shirtbox'>
-                        <img src={back} alt="Back IMG" className='shirtpic'/>
-                        <p>Back</p>
+                        <img src={p2_url} alt={p2_url} className='shirtpic'/>
+                        <p>{pic2_title}</p>
                     </div>
                 </div>
             </div>

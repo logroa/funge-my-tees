@@ -14,8 +14,10 @@ class BuyerSerializer(serializers.ModelSerializer):
 
 class ShirtSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=100)
-    front_img_url = serializers.CharField(max_length=100)
-    back_img_url = serializers.CharField(max_length=100)
+    pic1_img_url = serializers.CharField(max_length=100)
+    pic1_title = serializers.CharField(max_length=100)
+    pic2_img_url = serializers.CharField(max_length=100)
+    pic2_title = serializers.CharField(max_length=100)
     price = serializers.IntegerField(default=20)
     available = serializers.BooleanField(default=True)
     hex = serializers.CharField(max_length=10)

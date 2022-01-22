@@ -13,8 +13,10 @@ class Buyer(models.Model):
 
 class Shirt(models.Model):
     name = models.CharField(max_length=100)
-    front_img_url = models.CharField(max_length=100)
-    back_img_url = models.CharField(max_length=100)
+    pic1_img_url = models.CharField(max_length=100)
+    pic1_title = models.CharField(max_length=100, default="Front")
+    pic2_img_url = models.CharField(max_length=100)
+    pic2_title = models.CharField(max_length=100, default="Back")
     price = models.IntegerField(default=20)
     available = models.BooleanField(default=True)
     hex = models.CharField(max_length=10, default='#FFFFFF')
