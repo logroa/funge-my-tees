@@ -2,7 +2,7 @@ import './App.css';
 import Closet from './components/Closet'
 
 function App() {
-  const coin = require('./pixal-coin.svg');
+  const coin = '/images/pixal-coin.svg';
   return (
     <div className="App">
       <header className="App-header">
