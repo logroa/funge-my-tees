@@ -1,0 +1,41 @@
+.shirt {
+    width: 100vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.shirttext {
+    width: 50%;
+}
+
+.shirtimages {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.shirtbox {
+    width: 50%;  
+}
+
+.shirtpic {
+    max-width: 80%;
+    height: auto;
+}
+
+@media screen and (max-width: 800px) {
+    .shirtimages {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .shirt {
+        flex-direction: column;
+    }
+}
