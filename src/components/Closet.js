@@ -17,8 +17,12 @@ class Closet extends React.Component {
 
     componentDidMount() {
         const { url } = this.props;
-
-        fetch(url)
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'},
+            credentials: 'same-origin'
+        }
+        fetch(url, requestOptions)
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
                 return response.json();
