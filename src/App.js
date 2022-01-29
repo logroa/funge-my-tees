@@ -9,7 +9,7 @@ function App() {
         <img src={coin} className="App-logo" alt="logo" />
         <h1>FungeMyTees.com</h1>
       </header>
-      <Closet url='http://localhost:8000/api/shirts/' className='following'/>
+      <Closet url='/api/shirts/' className='following'/>
     </div>
   );
 }
