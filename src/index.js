@@ -17,5 +17,5 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-axios.default.xsrfCookieName = 'csrftoken'
-axios.default.xsrfHeaderName = 'X-CSRFToken'
+//axios.default.xsrfCookieName = 'csrftoken'
+//axios.default.xsrfHeaderName = 'X-CSRFToken'
