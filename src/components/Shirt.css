@@ -39,3 +39,14 @@
         flex-direction: column;
     }
 }
+
+@media screen and (max-width: 400px) {
+    .shirtimages {
+        width: 100%
+    }
+
+    .shirt {
+        height: 90vh;
+        width: 100%;
+    }
+}

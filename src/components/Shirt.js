@@ -36,8 +36,8 @@ class Shirt extends React.Component {
     render() {
         const { id, name, pic1_img_url, pic1_title, pic2_img_url, pic2_title, price, available, hex } = this.state;
 
-        let p1_url = "/images/".concat(pic1_img_url);
-        let p2_url = "/images/".concat(pic2_img_url);
+        let p1_url = "../src/images/".concat(pic1_img_url);
+        let p2_url = "../src/images/".concat(pic2_img_url);
 
         const shirtstyle = {
             backgroundColor: hex
