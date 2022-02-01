@@ -19,7 +19,7 @@ class Closet extends React.Component {
         const { url } = this.props;
         const requestOptions = {
             method: 'GET',
-            headers: { 'Content-Type': 'text/javascript'},
+            headers: { 'Content-Type': 'text/javascript' },
             credentials: 'same-origin'
         }
         fetch(url, requestOptions)
