@@ -26,7 +26,7 @@ class ShirtViews(APIView):
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         shirts = Shirt.objects.filter(available=True)
         serializer = ShirtSerializer(shirts, many=True)
-        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)
     
     def patch(self, request, id=None):
         shirt = Shirt.objects.get(id=id)
