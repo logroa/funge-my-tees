@@ -3,7 +3,7 @@ from .models import Buyer, Shirt, Order
 from datetime import datetime
 
 class BuyerSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(max_length=255, primary_key=True)
+    email = serializers.CharField(max_length=255)
     phone_number = serializers.CharField(max_length=15)
     name = serializers.CharField(max_length=255)
     created_on = serializers.DateTimeField(default=datetime.now())

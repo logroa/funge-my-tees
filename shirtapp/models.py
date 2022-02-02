@@ -4,12 +4,12 @@ from datetime import datetime
 
 class Buyer(models.Model):
     email = models.CharField(max_length=255, primary_key = True)
-    phone_number = models.CharField(max_length=15)
-    name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15, default="xxx")
+    name = models.CharField(max_length=255, default="none")
     created_on = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
-        return self.email
+        return self.email + " " + self.name
 
 
 class Shirt(models.Model):
