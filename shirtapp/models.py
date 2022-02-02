@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+import django
 
 class Buyer(models.Model):
     email = models.CharField(max_length=255, primary_key = True)
     phone_number = models.CharField(max_length=15, default="xxx")
     name = models.CharField(max_length=255, default="none")
-    created_on = models.DateTimeField(default=datetime.now())
+    created_on = models.DateTimeField(default=django.utils.timezone.now)
 
     def __str__(self):
         return self.email + " " + self.name
@@ -30,7 +31,7 @@ class Order(models.Model):
     buyer_id = models.ForeignKey(Buyer, default=1, on_delete=models.CASCADE)
     shirt_id = models.ForeignKey(Shirt, default=1, on_delete=models.CASCADE)
     shirt_size = models.CharField(max_length=10)
-    order_date = models.DateTimeField(default=datetime.now())
+    order_date = models.DateTimeField(default=django.utils.timezone.now)
     order_price = models.FloatField(default = 20)
     fulfilled = models.BooleanField(default = False)
 
