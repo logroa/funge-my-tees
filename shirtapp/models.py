@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 class Buyer(models.Model):
-    email = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, primary_key = True)
+    phone_number = models.CharField(max_length=15)
+    name = models.CharField(max_length=255)
     created_on = models.DateTimeField(default=datetime.now())
-    last_order = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
         return self.email
@@ -30,7 +31,8 @@ class Order(models.Model):
     shirt_id = models.ForeignKey(Shirt, default=1, on_delete=models.CASCADE)
     shirt_size = models.CharField(max_length=10)
     order_date = models.DateTimeField(default=datetime.now())
-    order_num = models.IntegerField(default=1)
+    order_price = models.FloatField(default = 20)
+    fulfilled = models.BooleanField(default = False)
 
     def __str__(self):
         return str(self.buyer_id) + " " + str(self.shirt_id) + " " + str(self.shirt_size)

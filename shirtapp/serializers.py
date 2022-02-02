@@ -3,9 +3,10 @@ from .models import Buyer, Shirt, Order
 from datetime import datetime
 
 class BuyerSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(max_length=255)
+    email = serializers.CharField(max_length=255, primary_key=True)
+    phone_number = serializers.CharField(max_length=15)
+    name = serializers.CharField(max_length=255)
     created_on = serializers.DateTimeField(default=datetime.now())
-    last_order = serializers.DateTimeField(default=datetime.now())
 
     class Meta:
         model = Buyer
@@ -32,7 +33,8 @@ class OrderSerializer(serializers.ModelSerializer):
     shirt_id = serializers.PrimaryKeyRelatedField(queryset=Shirt.objects.all())
     shirt_size = serializers.CharField(max_length=10, required=False, default='L')
     order_date = serializers.DateTimeField(default=datetime.now())
-    order_num = serializers.IntegerField(default=1)
+    order_price = serializers.FloatField(default = 20)
+    fulfilled = serializers.BooleanField(default=False)
 
     class Meta:
         model = Order
