@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -49,23 +49,24 @@ class OrderViews(APIView):
     API endpoint for placing orders.
     """
     def post(self, request):
+        data = json.loads(request.data)
         try:
-            buyer = Buyer.objects.get(email = request['email'])
-            buyer.name = request['name']
-            buyer.phone_number = request['phone_number']
+            buyer = Buyer.objects.get(email = data['email'])
+            buyer.name = data['name']
+            buyer.phone_number = data['phone_number']
             buyer.save()
         except:
-            buyer = Buyer(email=request['email'], name=request['name'],
-                          phone_number=request['phone_number'], created_on=datetime.now())
+            buyer = Buyer(email=data['email'], name=data['name'],
+                          phone_number=data['phone_number'], created_on=datetime.now())
             buyer.save()
         orders = []
-        for o in request['orders']:
+        for o in data['orders']:
             data = {
                 'buyer_id': buyer,
-                'shirt_id': Shirt.objects.get(id=request['id']),
-                'shirt_size': o['shirt_size'],
+                'shirt_id': Shirt.objects.get(id=data['id']),
+                'shirt_size': o,
                 'order_date': datetime.now(),
-                'order_price': o['order_price'],
+                'order_price': data['order_price'],
                 'fulfilled': False
             }
             orders.append(data)
