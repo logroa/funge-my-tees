@@ -9,8 +9,10 @@ class Shirt extends React.Component {
         this.state = {
             id: 0,
             name: '',
-            front_img_url: '',
-            back_img_url: '',
+            pic1_img_url: '',
+            pic1_title: '',
+            pic2_img_url: '',
+            pic2_title: '',
             price: 0,
             available: true,
             hex: '',
@@ -108,13 +110,14 @@ class Shirt extends React.Component {
         const shirtstyle = {
             backgroundColor: hex
         }
+        //{(event) => this.setState(prevState => {return { order_shirts: prevState.order_shirts.push(event.target.value)}});}
 
         function sizeRenderer() {
             let num_shirts = document.getElementById("shirt-num").value
             let size_options = "";
             for (let x = 0; x < parseInt(num_shirts); ++x) {
                 size_options += (
-                    `<select name="size${x.toString()}" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                    `<select name="size${x.toString()}" id="shirt-size" onChange={(event) => this.setState(prevState => {return { order_shirts: prevState.order_shirts.push(event.target.value)}});} required>
                         <option value="S">S</option>
                         <option value="M">M</option>
                         <option value="L">L</option>
@@ -130,10 +133,10 @@ class Shirt extends React.Component {
             form = (
                 <div id="form">
                     <form id="order-shirt" onSubmit={(event) => this.orderShirt(event)}>
-                        Name <input type="text" name="name" onChange={(event) => this.formTypeHandle({order_name}, event)} required/>
-                        Email <input type="text" name="email" onChange={(event) => this.formTypeHandle({order_email}, event)} required/>
-                        Phone Number <input type="text" name="phone_number" onChange={(event) => this.formTypeHandle({order_phone_number}, event)} required/>
-                        How many?   <select name="shirt-num" id="shirt-num" onChange={sizeRenderer()} required>
+                        Name <input type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/>
+                        Email <input type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/>
+                        Phone Number <input type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/>
+                        How many?   <select name="shirt-num" id="shirt-num" onChange={() => sizeRenderer()} required>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
