@@ -20,13 +20,15 @@ class Shirt extends React.Component {
             order_name: "",
             order_phone_number: "",
             order_email: "",
-            order_shirts: []
+            order_shirts: {}
         };
         // will add functionality for picking shirt
         this.formTypeHandle = this.formTypeHandle.bind(this);
         this.openForm = this.openForm.bind(this);
         this.orderShirt = this.orderShirt.bind(this);
-        this.formSelectHandle = this.formSelectHandle.bind(this)
+        this.formSelectHandle = this.formSelectHandle.bind(this);
+        this.defaultSizeMaker = this.defaultSizeMaker.bind(this);
+        this.sizeRenderer = this.sizeRenderer.bind(this);
     }
 
     componentDidMount() {
@@ -41,7 +43,8 @@ class Shirt extends React.Component {
             price: shirt_rep.price,
             available: shirt_rep.available,
             hex: shirt_rep.hex,
-            form_is_open: false
+            form_is_open: false,
+            order_shirts: {"size0": "S"}
         });
     };
 
@@ -51,10 +54,22 @@ class Shirt extends React.Component {
 
     formSelectHandle(event) {
         this.setState(prevState => {
+            let shirts = prevState.order_shirts;
+            shirts[event.target.name] = event.target.value
             return {
-                order_shirts: prevState.order_shirts.push(event.target.value)
+                order_shirts: shirts
             }
         });
+    }
+
+    defaultSizeMaker(shirt) {
+        this.setState(prevState => {
+            let shirts = prevState.order_shirts;
+            shirts[shirt] = "S"
+            return {
+                order_shirts: shirts
+            }
+        });    
     }
 
     openForm() {
@@ -93,11 +108,31 @@ class Shirt extends React.Component {
                     order_name: "",
                     order_phone_number: "",
                     order_email: "",
-                    order_shirts: []                   
+                    order_shirts: {"size0": "S"}                   
                 });
             })
             .catch((error) => console.log(error));
         event.preventDefault();
+    }
+
+    sizeRenderer() {
+        let num_shirts = document.getElementById("shirt-num").value
+        let size_options = "";
+        this.setState({
+            order_shirts: {}
+        });
+        for (let x = 0; x < parseInt(num_shirts); ++x) {
+            size_options += (
+                `<select name="size${x.toString()}" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select> <br/>`
+            );
+            this.defaultSizeMaker("size".concat(x.toString()));
+        }
+        document.getElementById("sizes").innerHTML = size_options
     }
 
     render() {
@@ -112,38 +147,30 @@ class Shirt extends React.Component {
         }
         //{(event) => this.setState(prevState => {return { order_shirts: prevState.order_shirts.push(event.target.value)}});}
 
-        function sizeRenderer() {
-            let num_shirts = document.getElementById("shirt-num").value
-            let size_options = "";
-            for (let x = 0; x < parseInt(num_shirts); ++x) {
-                size_options += (
-                    `<select name="size${x.toString()}" id="shirt-size" onChange={(event) => this.setState(prevState => {return { order_shirts: prevState.order_shirts.push(event.target.value)}});} required>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                    </select> <br/>`
-                );
-            }
-            document.getElementById("sizes").innerHTML = size_options
-        }
-
         let form = ""
         if (form_is_open) {
+
             form = (
                 <div id="form">
                     <form id="order-shirt" onSubmit={(event) => this.orderShirt(event)}>
                         Name <input type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/>
                         Email <input type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/>
                         Phone Number <input type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/>
-                        How many?   <select name="shirt-num" id="shirt-num" onChange={() => sizeRenderer()} required>
+                        How many?   <select name="shirt-num" id="shirt-num" onChange={() => this.sizeRenderer()} required>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
 
-                        <div id="sizes"></div>
+                        <div id="sizes">
+                            <select name="size0" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select> <br/>
+                        </div>
 
                         <input type="submit" value="Mint"/>
                     </form>
