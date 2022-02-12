@@ -28,6 +28,10 @@
     height: auto;
 }
 
+#sizes {
+    list-style-type: none;
+}
+
 @media screen and (max-width: 800px) {
     .shirtimages {
         flex-direction: column;

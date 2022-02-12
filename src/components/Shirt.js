@@ -20,6 +20,8 @@ class Shirt extends React.Component {
             order_name: "",
             order_phone_number: "",
             order_email: "",
+            num_shirts: 1,
+            size_forms: [],
             order_shirts: {}
         };
         // will add functionality for picking shirt
@@ -44,6 +46,17 @@ class Shirt extends React.Component {
             available: shirt_rep.available,
             hex: shirt_rep.hex,
             form_is_open: false,
+            num_shirts: 1,
+            size_forms: [
+                [0, <div>
+                    <select name="size0" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select> <br/>
+                </div>]            
+            ],
             order_shirts: {"size0": "S"}
         });
     };
@@ -67,6 +80,7 @@ class Shirt extends React.Component {
             let shirts = prevState.order_shirts;
             shirts[shirt] = "S"
             return {
+                num_shirts: 1,
                 order_shirts: shirts
             }
         });    
@@ -108,6 +122,17 @@ class Shirt extends React.Component {
                     order_name: "",
                     order_phone_number: "",
                     order_email: "",
+                    num_shirts: 1,
+                    size_forms: [
+                        [0,<div>
+                            <select name="size0" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select> <br/>
+                        </div>]
+                    ],
                     order_shirts: {"size0": "S"}                   
                 });
             })
@@ -116,28 +141,35 @@ class Shirt extends React.Component {
     }
 
     sizeRenderer() {
-        let num_shirts = document.getElementById("shirt-num").value
-        let size_options = "";
+        let num_shirts1 = document.getElementById("shirt-num").value
+        let size_options = [];
         this.setState({
+            num_shirts: parseInt(num_shirts1),
+            size_forms: [],
             order_shirts: {}
         });
-        for (let x = 0; x < parseInt(num_shirts); ++x) {
-            size_options += (
-                `<select name="size${x.toString()}" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                </select> <br/>`
+        for (let x = 0; x < parseInt(num_shirts1); ++x) {
+            let num = "size".concat(x.toString())
+            size_options.push(
+                [x, <div>
+                    <select name={num} id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select> <br/>
+                </div>]
             );
             this.defaultSizeMaker("size".concat(x.toString()));
         }
-        document.getElementById("sizes").innerHTML = size_options
+        this.setState({
+            size_forms: size_options
+        });
     }
 
     render() {
         const { id, name, pic1_img_url, pic1_title, pic2_img_url, pic2_title, price, available, hex, form_is_open,
-                order_name, order_phone_number, order_email, order_shirts } = this.state;
+                order_name, order_phone_number, order_email, num_shirts, size_forms, order_shirts } = this.state;
 
         let p1_url = "../src/images/".concat(pic1_img_url);
         let p2_url = "../src/images/".concat(pic2_img_url);
@@ -149,6 +181,9 @@ class Shirt extends React.Component {
 
         let form = ""
         if (form_is_open) {
+            let shirt_sizes = size_forms.map((s) => 
+                <li key={s[0]}>{s[1]}</li>
+            );
 
             form = (
                 <div id="form">
@@ -164,12 +199,7 @@ class Shirt extends React.Component {
                         </select>
 
                         <div id="sizes">
-                            <select name="size0" id="shirt-size" onChange={(event) => this.formSelectHandle(event)} required>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                            </select> <br/>
+                            {shirt_sizes}
                         </div>
 
                         <input type="submit" value="Mint"/>
