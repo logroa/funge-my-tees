@@ -4,10 +4,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .serializers import BuyerSerializer, ShirtSerializer, OrderSerializer
-from .models import Buyer, Shirt, Order
+from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer
+from .models import Advocate, Shirt, Order
 
-from datetime import datetime
+from datetime import date
+
+class AdvocateViews(APIView):
+    """
+    API endpoint returning buyers.
+    """
+    def get(self, request, id=None):
+        if id:
+            adv = Advocate.objects.get(id=id)
+            serializer = AdvocateSerializer(adv)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        shirts = Advocate.objects.all()
+        serializer = ShirtSerializer(shirts, many=True)
+        return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)   
 
 class ShirtViews(APIView):
     """
@@ -17,7 +30,7 @@ class ShirtViews(APIView):
         serializer = ShirtSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -49,32 +62,40 @@ class OrderViews(APIView):
     API endpoint for placing orders.
     """
     def post(self, request):
-        data = json.loads(request.data)
+        data = {
+            'email': request.data.get('email'),
+            'name': request.data.get('name'),
+            'phone_number': request.data.get('phone_number'),
+            'id': request.data.get('id'),
+            'order_price': request.data.get('order_price'),
+            'orders': list(request.data.get('orders').values())
+        }
         try:
-            buyer = Buyer.objects.get(email = data['email'])
+            buyer = Advocate.objects.get(email = data['email'])
             buyer.name = data['name']
             buyer.phone_number = data['phone_number']
             buyer.save()
         except:
-            buyer = Buyer(email=data['email'], name=data['name'],
-                          phone_number=data['phone_number'], created_on=datetime.now())
+            buyer = Advocate(email=data['email'], name=data['name'],
+                          phone_number=data['phone_number'], created_on=date.today())
             buyer.save()
         orders = []
         for o in data['orders']:
-            data = {
-                'buyer_id': buyer,
-                'shirt_id': Shirt.objects.get(id=data['id']),
+            data1 = {
+                'advocate': buyer.id,
+                'shirt': data['id'],
                 'shirt_size': o,
-                'order_date': datetime.now(),
+                'order_date': date.today(),
                 'order_price': data['order_price'],
                 'fulfilled': False
             }
-            orders.append(data)
-        serializer = OrderSerializer(data=orders)
+            orders.append(data1)
+        serializer = OrderSerializer(data=orders, many=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
         else:
+            print(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     

@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Buyer, Shirt, Order
-from datetime import datetime
+from .models import Advocate, Shirt, Order
+from datetime import date
 
-class BuyerSerializer(serializers.ModelSerializer):
+class AdvocateSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255)
     phone_number = serializers.CharField(max_length=15)
     name = serializers.CharField(max_length=255)
-    created_on = serializers.DateTimeField(default=datetime.now())
+    created_on = serializers.DateTimeField(default=date.today())
 
     class Meta:
-        model = Buyer
+        model = Advocate
         fields = ('__all__')
 
 
@@ -29,10 +29,10 @@ class ShirtSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    buyer_id = serializers.PrimaryKeyRelatedField(queryset=Buyer.objects.all())
-    shirt_id = serializers.PrimaryKeyRelatedField(queryset=Shirt.objects.all())
+    advocate = serializers.PrimaryKeyRelatedField(queryset=Advocate.objects.all())
+    shirt = serializers.PrimaryKeyRelatedField(queryset=Shirt.objects.all())
     shirt_size = serializers.CharField(max_length=10, required=False, default='L')
-    order_date = serializers.DateTimeField(default=datetime.now())
+    order_date = serializers.DateField(default=date.today())
     order_price = serializers.FloatField(default = 20)
     fulfilled = serializers.BooleanField(default=False)
 
