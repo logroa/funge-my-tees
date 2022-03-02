@@ -177,7 +177,18 @@ class Shirt extends React.Component {
         const shirtstyle = {
             backgroundColor: hex
         }
-        //{(event) => this.setState(prevState => {return { order_shirts: prevState.order_shirts.push(event.target.value)}});}
+
+        let buttonstyle = {
+            backgroundColor: "#FFFFFF",
+            color: hex
+        }
+        if (hex == "#FFFFFF") {
+            let bstyle = {
+                backgroundColor: "#000000",
+                color: "#FFFFFF"
+            }
+            buttonstyle = bstyle
+        }
 
         let form = ""
         if (form_is_open) {
@@ -188,9 +199,9 @@ class Shirt extends React.Component {
             form = (
                 <div id="form">
                     <form id="order-shirt" onSubmit={(event) => this.orderShirt(event)}>
-                        Name <input type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/>
-                        Email <input type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/>
-                        Phone Number <input type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/>
+                        Name <input type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/> <br/>
+                        Email <input type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/> <br/>
+                        Phone Number <input type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/> <br/>
                         How many?   <select name="shirt-num" id="shirt-num" onChange={() => this.sizeRenderer()} required>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -202,7 +213,7 @@ class Shirt extends React.Component {
                             {shirt_sizes}
                         </div>
 
-                        <input type="submit" value="Mint"/>
+                        <br/><input className="form-opener" style={buttonstyle} type="submit" value="Mint"/>
                     </form>
                 </div>
             );
@@ -214,18 +225,20 @@ class Shirt extends React.Component {
                     <p>{name}</p>
                     <p>${price}</p>
 
-                    <button className="form-opener" onClick={() => {this.openForm()}}>
+                    <button className="form-opener" style={buttonstyle} onClick={() => {this.openForm()}}>
                         Mint Yours
                     </button>
                 </div>
                 <div className='shirtimages'>
-                    <div className='shirtbox'>
-                        <img src={p1_url} alt={p1_url} className='shirtpic'/>
-                        <p>{pic1_title}</p>
-                    </div>
-                    <div className='shirtbox'>
-                        <img src={p2_url} alt={p2_url} className='shirtpic'/>
-                        <p>{pic2_title}</p>
+                    <div className='imagesonly'>
+                        <div className='shirtbox'>
+                            <img src={p1_url} alt={p1_url} className='shirtpic'/>
+                            <p>{pic1_title}</p>
+                        </div>
+                        <div className='shirtbox'>
+                            <img src={p2_url} alt={p2_url} className='shirtpic'/>
+                            <p>{pic2_title}</p>
+                        </div>
                     </div>
 
                     {form}

@@ -36,4 +36,4 @@ class Order(models.Model):
     fulfilled = models.BooleanField(default = False)
 
     def __str__(self):
-        return str(self.buyer_id) + " " + str(self.shirt_id) + " " + str(self.shirt_size)
+        return str(self.advocate) + " " + str(self.shirt) + " " + str(self.shirt_size)
