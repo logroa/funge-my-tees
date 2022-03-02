@@ -4,7 +4,7 @@ import Closet from './components/Closet';
 
 function App() {
   const coin = '../src/images/pixal-coin.svg';
-  const api_url = 'https://nfteeshirts.herokuapp.com/api/shirts/';
+  const api_url = "http://localhost:8000/api/shirts/";  //'https://nfteeshirts.herokuapp.com/api/shirts/';
 
   return (
     <div className="App">

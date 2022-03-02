@@ -99,18 +99,18 @@ class Shirt extends React.Component {
         const newOrder = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            data: JSON.stringify(
+            body: JSON.stringify(
                 {
                     "email": this.state.order_email,
                     "name": this.state.order_name,
-                    "phone_number": this.state.phone_number,
+                    "phone_number": this.state.order_phone_number,
                     "orders": this.state.order_shirts,
                     "order_price": this.state.price,
                     "id": this.state.id
                 }
             )
         };
-        const api_url = 'https://nfteeshirts.herokuapp.com/api/order/';
+        const api_url = 'http://localhost:8000/api/order/'; //'https://nfteeshirts.herokuapp.com/api/order/';
         fetch(api_url, newOrder)
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);

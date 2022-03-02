@@ -62,6 +62,8 @@ class OrderViews(APIView):
     API endpoint for placing orders.
     """
     def post(self, request):
+        print("request data: ", request.data)
+        print("request: ", request)
         data = {
             'email': request.data.get('email'),
             'name': request.data.get('name'),
