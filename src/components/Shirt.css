@@ -26,7 +26,7 @@
 }
 
 .shirtpic {
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
 }
 
@@ -36,6 +36,27 @@
 
 .imagesonly {
     display: flex;
+}
+
+hr {
+    display: block;
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+
+#order-shirt {
+    text-align: right;
+}
+
+.textformbox {
+    padding: 6px 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
 }
 
 @media screen and (max-width: 800px) {

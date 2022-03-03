@@ -198,10 +198,13 @@ class Shirt extends React.Component {
 
             form = (
                 <div id="form">
+                    <br/>
+                    <hr />
+                    <br/>
                     <form id="order-shirt" onSubmit={(event) => this.orderShirt(event)}>
-                        Name <input type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/> <br/>
-                        Email <input type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/> <br/>
-                        Phone Number <input type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/> <br/>
+                        Name <input className="textformbox" type="text" name="name" onChange={(event) => this.setState({ order_name: event.target.value })} required/> <br/>
+                        Email <input className="textformbox" type="text" name="email" onChange={(event) => this.setState({ order_email: event.target.value })} required/> <br/>
+                        Phone Number <input className="textformbox" type="text" name="phone_number" onChange={(event) => this.setState({ order_phone_number: event.target.value })} required/> <br/>
                         How many?   <select name="shirt-num" id="shirt-num" onChange={() => this.sizeRenderer()} required>
                             <option value="1">1</option>
                             <option value="2">2</option>
