@@ -21,8 +21,8 @@ class AdvocateViews(APIView):
             adv = Advocate.objects.get(id=id)
             serializer = AdvocateSerializer(adv)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        shirts = Advocate.objects.all()
-        serializer = ShirtSerializer(shirts, many=True)
+        advos = Advocate.objects.all()
+        serializer = AdvocateSerializer(advos, many=True)
         return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)   
 
 class ShirtViews(APIView):
