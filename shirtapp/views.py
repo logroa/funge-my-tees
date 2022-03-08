@@ -2,6 +2,8 @@ from django.shortcuts import render
 import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required 
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer
@@ -13,6 +15,7 @@ class AdvocateViews(APIView):
     """
     API endpoint returning buyers.
     """
+    @method_decorator(login_required)
     def get(self, request, id=None):
         if id:
             adv = Advocate.objects.get(id=id)
@@ -26,6 +29,7 @@ class ShirtViews(APIView):
     """
     API endpoint returning available shirts.
     """
+    @method_decorator(login_required)
     def post(self, request):
         serializer = ShirtSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,6 +38,7 @@ class ShirtViews(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
+    @method_decorator(login_required)
     def get(self, request, id=None):
         if id:
             shirt = Shirt.objects.get(id=id)
@@ -43,6 +48,7 @@ class ShirtViews(APIView):
         serializer = ShirtSerializer(shirts, many=True)
         return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)
     
+    @method_decorator(login_required)
     def patch(self, request, id=None):
         shirt = Shirt.objects.get(id=id)
         serializer = ShirtSerializer(shirt, data=request.data, partial=True)
@@ -52,6 +58,7 @@ class ShirtViews(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors})
     
+    @method_decorator(login_required)
     def delete(self, request, id=None):
         shirt = get_object_or_404(Shirt, id=id)
         shirt.delete()
