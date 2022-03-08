@@ -38,7 +38,6 @@ class ShirtViews(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
-    @method_decorator(login_required)
     def get(self, request, id=None):
         if id:
             shirt = Shirt.objects.get(id=id)
