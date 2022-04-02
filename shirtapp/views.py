@@ -110,8 +110,6 @@ class OrderViews(APIView):
         try:
             adv = Advocate.objects.get(email = data['email'])
             adv.name = data['name']
-            adv.phone_number = data['phone_number']
-            adv.save()
         except:
             adv = Advocate(email=data['email'], name=data['name'],
                           phone_number=data['phone_number'], created_on=date.today())
@@ -135,6 +133,9 @@ class OrderViews(APIView):
             text_response = texter.send_text(text_body, data['phone_number'])
             if text_response == "ERROR":
                 return Response({"status": "error", "data": f"Problem with phone number: {data['phone_number']}"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            adv.phone_number = data['phone_number']
+            adv.save()
 
             serializer.save()
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
