@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 import json
@@ -13,6 +14,9 @@ from .models import Advocate, Shirt, Order
 from .messager import Texter
 
 from datetime import date
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class AdvocateViews(APIView):
     """
@@ -90,15 +94,18 @@ class OrderViews(APIView):
             Holy shit, {data['name'].split()[0]}! I can't believe you actually bought this thing.  That's 
             hilarious.  Obviously you didn't pay directly through the site, and the reason for that
             is, well, we at FungeMyTees are just not that good at coding.  Credit card numbers? Actual money?? Security???
-            We're well aware of our limitations.  So here's what we're going to do.  If you do actually want the 
+            We're well aware of our limitations.  
+            """
+            
+        message_pt2 = f"""So here's what we're going to do.  If you do actually want the 
             shirt, which does reflect poorly on you, click the link at the bottom of this text and we'll venmo request 
-            you based on this phone number for your order ({len(data['orders'])} {ordered_shirt.name} for ${len(data['orders'])*data['order_price']}).  
+            you based on this phone number for your order ({len(data['orders'])} '{ordered_shirt.name}' for ${len(data['orders'])*data['order_price']}).  
             If venmo doesn't work for you but you still want a shirt, email fungemytees@gmail.com and let us
             know what's up.
         """
-        link = f"\n\nhttps://nfteeshirts.herokuapp/api/confirmation/{order_uuid}"
+        link = f"\n\n{os.environ.get('API_URL', 'envwrong')}/api/confirmation/{order_uuid}"
         
-        text_body = " ".join(message.split()) + link
+        text_body = " ".join(message.split()) + "\n\n" + " ".join(message_pt2.split()) + link
 
         try:
             adv = Advocate.objects.get(email = data['email'])
@@ -135,17 +142,16 @@ class OrderViews(APIView):
             print(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class ConfirmationViews(APIView):
+def confirm_order(request, order_uuid):
     """
     Handling order confirmation via text url.
     """
-    def post(self, request, order_uuid):
-        orders = Order.objects.filter(order_uuid=order_uuid)
-        for order in orders:
-            order.confirm()
-            order.save()
-    
-        texter = Texter()
-        texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
+    orders = Order.objects.filter(order_uuid=order_uuid)
+    for order in orders:
+        order.confirm()
+        order.save()
 
-        return HttpResponse('Thanks for confirming your order!')
+    texter = Texter()
+    texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
+
+    return HttpResponse('Thanks for confirming your order!')
