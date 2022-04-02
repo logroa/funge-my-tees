@@ -85,8 +85,8 @@ class OrderViews(APIView):
         texter = Texter()
         order_uuid = str(uuid.uuid4())
         ordered_shirt = Shirt.objects.get(id=data["id"])
-        text_body = f"""
-            Holy shit, {data['name']}! I can't believe you actually bought this thing.  That's
+        message = f"""
+            Holy shit, {data['name'].split()[0]}! I can't believe you actually bought this thing.  That's 
             hilarious.  Obviously you didn't pay directly through the site, and the reason for that
             is, well, we at FungeMyTees are just not that good at coding.  Credit card numbers? Actual money?? Security???
             We're well aware of our limitations.  So here's what we're going to do.  If you do actually want the 
@@ -94,9 +94,10 @@ class OrderViews(APIView):
             you based on this phone number for your order ({len(data['orders'])} {ordered_shirt.name} for ${len(data['orders'])*data['order_price']}).  
             If venmo doesn't work for you but you still want a shirt, email fungemytees@gmail.com and let us
             know what's up.
-
-            https://nfteeshirts.herokuapp/api/confirmation/{order_uuid} <- make this clickable and maybe cover it up too  
         """
+        link = f"\n\nhttps://nfteeshirts.herokuapp/api/confirmation/{order_uuid}"
+        
+        text_body = " ".join(message.split()) + link
 
         try:
             adv = Advocate.objects.get(email = data['email'])
