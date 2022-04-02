@@ -34,7 +34,7 @@ class Order(models.Model):
     order_date = models.DateField(null=True)
     order_price = models.FloatField(default = 20)
     order_uuid = models.CharField(max_length=100)
-    confirmed = models.FloatField(default = False)
+    confirmed = models.BooleanField(default = False)
     fulfilled = models.BooleanField(default = False)
 
     def __str__(self):
