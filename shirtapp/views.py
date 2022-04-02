@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import json
 import uuid
 from rest_framework.views import APIView
@@ -147,4 +148,4 @@ class ConfirmationViews(APIView):
         texter = Texter()
         texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
 
-        return
+        return HttpResponse('Thanks for confirming your order!')
