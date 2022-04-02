@@ -107,6 +107,7 @@ class OrderViews(APIView):
         
         text_body = " ".join(message.split()) + "\n\n" + " ".join(message_pt2.split()) + link
 
+        new_user = False
         try:
             adv = Advocate.objects.get(email = data['email'])
             adv.name = data['name']
@@ -114,6 +115,7 @@ class OrderViews(APIView):
             adv = Advocate(email=data['email'], name=data['name'],
                           phone_number=data['phone_number'], created_on=date.today())
             adv.save()
+            new_user = True
         orders = []
         for o in data['orders']:
             data1 = {
@@ -132,6 +134,8 @@ class OrderViews(APIView):
 
             text_response = texter.send_text(text_body, data['phone_number'])
             if text_response == "ERROR":
+                if new_user:
+                    adv.delete()
                 return Response({"status": "error", "data": f"Problem with phone number: {data['phone_number']}"}, status=status.HTTP_400_BAD_REQUEST)
             
             adv.phone_number = data['phone_number']
