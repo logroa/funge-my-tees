@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required 
@@ -8,6 +9,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer
 from .models import Advocate, Shirt, Order
+from .messager import Texter
 
 from datetime import date
 
@@ -70,6 +72,7 @@ class OrderViews(APIView):
     def post(self, request):
         print("request data: ", request.data)
         print("request: ", request)
+
         data = {
             'email': request.data.get('email'),
             'name': request.data.get('name'),
@@ -78,32 +81,69 @@ class OrderViews(APIView):
             'order_price': request.data.get('order_price'),
             'orders': list(request.data.get('orders').values())
         }
+
+        texter = Texter()
+        order_uuid = str(uuid.uuid4())
+        ordered_shirt = Shirt.objects.get(id=data["id"])
+        text_body = f"""
+            Holy shit, {data['name']}! I can't believe you actually bought this thing.  That's
+            hilarious.  Obviously you didn't pay directly through the site, and the reason for that
+            is, well, we at FungeMyTees are just not that good at coding.  Credit card numbers? Actual money?? Security???
+            We're well aware of our limitations.  So here's what we're going to do.  If you do actually want the 
+            shirt, which does reflect poorly on you, click the link at the bottom of this text and we'll venmo request 
+            you based on this phone number for your order ({len(data['orders'])} {ordered_shirt.name} for ${len(data['orders'])*data['order_price']}).  
+            If venmo doesn't work for you but you still want a shirt, email fungemytees@gmail.com and let us
+            know what's up.
+
+            https://nfteeshirts.herokuapp/api/confirmation/{order_uuid} <- make this clickable and maybe cover it up too  
+        """
+
         try:
-            buyer = Advocate.objects.get(email = data['email'])
-            buyer.name = data['name']
-            buyer.phone_number = data['phone_number']
-            buyer.save()
+            adv = Advocate.objects.get(email = data['email'])
+            adv.name = data['name']
+            adv.phone_number = data['phone_number']
+            adv.save()
         except:
-            buyer = Advocate(email=data['email'], name=data['name'],
+            adv = Advocate(email=data['email'], name=data['name'],
                           phone_number=data['phone_number'], created_on=date.today())
-            buyer.save()
+            adv.save()
         orders = []
         for o in data['orders']:
             data1 = {
-                'advocate': buyer.id,
+                'advocate': adv.id,
                 'shirt': data['id'],
                 'shirt_size': o,
                 'order_date': date.today(),
                 'order_price': data['order_price'],
+                'order_uuid': order_uuid,
+                'confirmed': False,
                 'fulfilled': False
             }
             orders.append(data1)
         serializer = OrderSerializer(data=orders, many=True)
         if serializer.is_valid():
+
+            text_response = texter.send_text(text_body, data['phone_number'])
+            if text_response == "ERROR":
+                return Response({"status": "error", "data": f"Problem with phone number: {data['phone_number']}"}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
         else:
             print(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+class ConfirmationViews(APIView):
+    """
+    Handling order confirmation via text url.
+    """
+    def post(self, request, order_uuid):
+        orders = Order.objects.filter(order_uuid=order_uuid)
+        for order in orders:
+            order.confirm()
+            order.save()
     
+        texter = Texter()
+        texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
+
+        return

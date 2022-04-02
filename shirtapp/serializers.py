@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Advocate, Shirt, Order
 from datetime import date
 
+
 class AdvocateSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255)
     phone_number = serializers.CharField(max_length=15)
@@ -34,6 +35,8 @@ class OrderSerializer(serializers.ModelSerializer):
     shirt_size = serializers.CharField(max_length=10, required=False, default='L')
     order_date = serializers.DateField(default=date.today())
     order_price = serializers.FloatField(default = 20)
+    order_uuid = serializers.CharField(max_length=100)
+    confirmed = serializers.BooleanField(default=False)
     fulfilled = serializers.BooleanField(default=False)
 
     class Meta:

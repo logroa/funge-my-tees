@@ -33,7 +33,15 @@ class Order(models.Model):
     shirt_size = models.CharField(max_length=10)
     order_date = models.DateField(null=True)
     order_price = models.FloatField(default = 20)
+    order_uuid = models.CharField(max_length=100)
+    confirmed = models.FloatField(default = False)
     fulfilled = models.BooleanField(default = False)
 
     def __str__(self):
         return str(self.advocate) + " " + str(self.shirt) + " " + str(self.shirt_size)
+    
+    def confirm(self):
+        self.confirmed = True
+    
+    def fulfill(self):
+        self.fulfilled = True
