@@ -151,12 +151,17 @@ def confirm_order(request, order_uuid):
     """
     Handling order confirmation via text url.
     """
+    order_confirmed = False
     orders = Order.objects.filter(order_uuid=order_uuid)
     for order in orders:
         order.confirm()
         order.save()
+        order_confirmed = True
 
-    texter = Texter()
-    texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
+        texter = Texter()
+    if order_confirmed:
+        texter.send_text(f"Order from {order.advocate} confirmed.", "9188845288")
+    else:
+        texter.send_text(f"Hmm weird order confirmation problem.", "9188845288")
 
     return HttpResponse('Thanks for confirming your order!')
