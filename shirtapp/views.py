@@ -7,10 +7,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required 
 from django.utils.decorators import method_decorator
+from pytz import timezone
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer, HitSerializer
-from .models import Advocate, Shirt, Order
+from .models import Advocate, Shirt, Order, Hit
 from .messager import Texter
 
 from datetime import datetime
@@ -37,10 +38,11 @@ def add_hit(ip_address):
     """
     Adds IP Address of someone who viewed website to database
     """
-    serializer = HitSerializer(data={ 'ip_address': ip_address, 'when': datetime.now()})
-    if serializer.is_valid():
-        serializer.save()
-    else:
+    try:
+        hit = Hit(ip_address=ip_address, when=datetime.now(timezone('America/Chicago')))
+        hit.save()
+    except Exception as e:
+        print("Error: ", e)
         print("Missed this IP: ", ip_address)
 
 class ShirtViews(APIView):
