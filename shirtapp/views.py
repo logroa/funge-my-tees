@@ -44,6 +44,7 @@ def add_hit(ip_address):
     except Exception as e:
         print("Error: ", e)
         print("Missed this IP: ", ip_address)
+    # probably some text functionality if a lot of traffic in one sitting right?
 
 class ShirtViews(APIView):
     """
