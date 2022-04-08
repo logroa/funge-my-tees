@@ -9,10 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer
+from .serializers import AdvocateSerializer, ShirtSerializer, OrderSerializer, HitSerializer
 from .models import Advocate, Shirt, Order
 from .messager import Texter
 
+from datetime import datetime
 from datetime import date
 from dotenv import load_dotenv
 
@@ -32,6 +33,16 @@ class AdvocateViews(APIView):
         serializer = AdvocateSerializer(advos, many=True)
         return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)   
 
+def add_hit(ip_address):
+    """
+    Adds IP Address of someone who viewed website to database
+    """
+    serializer = HitSerializer(data={ 'ip_address': ip_address, 'when': datetime.now()})
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        print("Missed this IP: ", ip_address)
+
 class ShirtViews(APIView):
     """
     API endpoint returning available shirts.
@@ -46,6 +57,7 @@ class ShirtViews(APIView):
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self, request, id=None):
+        add_hit(request.META.get('REMOTE_ADDR'))
         if id:
             shirt = Shirt.objects.get(id=id)
             serializer = ShirtSerializer(shirt)

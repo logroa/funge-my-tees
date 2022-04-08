@@ -45,3 +45,10 @@ class Order(models.Model):
     
     def fulfill(self):
         self.fulfilled = True
+
+class Hit(models.Model):
+    ip_address = models.CharField(max_length=30)
+    when = models.DateTimeField()
+
+    def __str__(self):
+        return f"ip address: {self.ip_address} at time: {self.when}"

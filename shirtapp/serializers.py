@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Advocate, Shirt, Order
+from .models import Advocate, Shirt, Order, Hit
 from datetime import date
 
 
@@ -41,4 +41,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
+        fields = ('__all__')
+
+class HitSerializer(serializers.ModelSerializer):
+    ip_address = serializers.CharField(max_length=30)
+    when = serializers.CharField()
+
+    class Meta:
+        model = Hit
         fields = ('__all__')
