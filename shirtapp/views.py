@@ -182,6 +182,7 @@ def confirm_order(request, order_uuid):
 
     return HttpResponse('Thanks for confirming your order!')
 
+@method_decorator(login_required)
 def order_stats(request, template_name='order_stats.html'):
     """
     Stats for current order statuses.
