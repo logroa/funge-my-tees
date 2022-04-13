@@ -1,0 +1,12 @@
+{% block content %}
+    <h1>FungeMyTees Order Stats</h1>
+    {% for shirt, value in shirts.items %}
+        <h2>{{ shirt }}:</h2>
+        Active Orders: {{ value.1 }} <br/>
+        Active Unconfirmed: {{ value.0 }} <br/>
+        Active Money: ${% widthratio value.1 1 20 %} <br/><br/>
+        Fulfilled Orders: {{ value.2 }} <br/>
+        Fulfilled Money: ${% widthratio value.2 1 20 %} <br/>
+
+    {% endfor %}
+{% endblock %}

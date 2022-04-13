@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required 
 from django.utils.decorators import method_decorator
+from django.shortcuts import render, redirect
 from pytz import timezone
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -180,3 +181,25 @@ def confirm_order(request, order_uuid):
         texter.send_text(f"Hmm weird order confirmation problem.", "9188845288")
 
     return HttpResponse('Thanks for confirming your order!')
+
+def order_stats(request, template_name='order_stats.html'):
+    """
+    Stats for current order statuses.
+    """
+
+    shirts = Shirt.objects.all()
+    orders = Order.objects.all()
+    order_response = {}
+    for shirt in shirts:
+        if shirt.name not in order_response:
+            order_response[shirt.name] = [0, 0, 0]
+
+    for order in orders:
+        if order.fulfilled:
+            order_response[order.shirt.name][2] += 1
+        else:
+            order_response[order.shirt.name][1] += 1
+            if not order.confirmed:
+                order_response[order.shirt.name][0] += 1
+    
+    return render(request, template_name, { "shirts": order_response })
