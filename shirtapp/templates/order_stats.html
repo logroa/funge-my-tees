@@ -2,11 +2,16 @@
     <h1>FungeMyTees Order Stats</h1>
     {% for shirt, value in shirts.items %}
         <h2>{{ shirt }}:</h2>
-        Active Orders: {{ value.1 }} <br/>
-        Active Unconfirmed: {{ value.0 }} <br/>
-        Active Money: ${% widthratio value.1 1 20 %} <br/><br/>
-        Fulfilled Orders: {{ value.2 }} <br/>
-        Fulfilled Money: ${% widthratio value.2 1 20 %} <br/>
+        Active Orders: {{ value.freq.1 }} <br/>
+        Active Unconfirmed: {{ value.freq.0 }} <br/>
+        Active Money: ${% widthratio value.freq.1 1 20 %} <br/><br/>
+        Size Breakdown: <br/>
+        S: {{ value.sizes.S }}<br/>
+        M: {{ value.sizes.M }}<br/>
+        L: {{ value.sizes.L }}<br/>
+        XL: {{ value.sizes.XL }}<br/><br/>
+        Fulfilled Orders: {{ value.freq.2 }} <br/>
+        Fulfilled Money: ${% widthratio value.freq.2 1 20 %} <br/>
 
     {% endfor %}
 {% endblock %}

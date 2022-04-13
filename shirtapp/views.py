@@ -182,7 +182,6 @@ def confirm_order(request, order_uuid):
 
     return HttpResponse('Thanks for confirming your order!')
 
-@method_decorator(login_required)
 def order_stats(request, template_name='order_stats.html'):
     """
     Stats for current order statuses.
@@ -193,14 +192,15 @@ def order_stats(request, template_name='order_stats.html'):
     order_response = {}
     for shirt in shirts:
         if shirt.name not in order_response:
-            order_response[shirt.name] = [0, 0, 0]
+            order_response[shirt.name] = { 'freq': [0, 0, 0], 'sizes': { 'S': 0, 'M': 0, 'L': 0, 'XL': 0 } }
 
     for order in orders:
         if order.fulfilled:
-            order_response[order.shirt.name][2] += 1
+            order_response[order.shirt.name]['freq'][2] += 1
         else:
-            order_response[order.shirt.name][1] += 1
+            order_response[order.shirt.name]['freq'][1] += 1
+            order_response[order.shirt.name]['sizes'][order.shirt_size] += 1
             if not order.confirmed:
-                order_response[order.shirt.name][0] += 1
+                order_response[order.shirt.name]['freq'][0] += 1
     
     return render(request, template_name, { "shirts": order_response })
