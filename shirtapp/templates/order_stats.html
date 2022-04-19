@@ -14,4 +14,12 @@
         Fulfilled Money: ${% widthratio value.freq.2 1 20 %} <br/>
 
     {% endfor %}
+
+    <h1>Raw Order Stats</h1>
+    {% for shirt, value in raw_orders.items %}
+        <h2>{{ shirt }}</h2>
+        {% for advocate, order in value.items %}
+            {{ advocate }} {{ order.phone_number }} {{ order.orders }} {{ order.total_price }} <br/>
+        {% endfor %}
+    {% endfor %}
 {% endblock %}

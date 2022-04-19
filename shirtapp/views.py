@@ -194,7 +194,9 @@ def order_stats(request, template_name='order_stats.html'):
         if shirt.name not in order_response:
             order_response[shirt.name] = { 'freq': [0, 0, 0], 'sizes': { 'S': 0, 'M': 0, 'L': 0, 'XL': 0 } }
 
+    raw_orders = {}
     for order in orders:
+
         if order.fulfilled:
             order_response[order.shirt.name]['freq'][2] += 1
         else:
@@ -202,5 +204,18 @@ def order_stats(request, template_name='order_stats.html'):
             order_response[order.shirt.name]['sizes'][order.shirt_size] += 1
             if not order.confirmed:
                 order_response[order.shirt.name]['freq'][0] += 1
+            
+            if order.shirt.name not in raw_orders:
+                raw_orders[order.shirt.name] = {}
+
+            if order.advocate.name not in raw_orders[order.shirt.name]:
+                raw_orders[order.shirt.name][order.advocate.name] = {
+                    "phone_number": order.advocate.phone_number,
+                    "orders": [order.shirt_size],
+                    "total_price": order.order_price
+                }
+            else:
+                raw_orders[order.shirt.name][order.advocate.name]["phone_number"].append(order.shirt_size)
+                raw_orders[order.shirt.name][order.advocate.name]["total_price"] += order.order_price
     
-    return render(request, template_name, { "shirts": order_response })
+    return render(request, template_name, { "shirts": order_response, "raw_orders": raw_orders })
