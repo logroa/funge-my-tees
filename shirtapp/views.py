@@ -217,5 +217,4 @@ def order_stats(request, template_name='order_stats.html'):
             else:
                 raw_orders[order.shirt.name][order.advocate.name]["phone_number"].append(order.shirt_size)
                 raw_orders[order.shirt.name][order.advocate.name]["total_price"] += order.order_price
-    
     return render(request, template_name, { "shirts": order_response, "raw_orders": raw_orders })
