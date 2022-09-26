@@ -29,4 +29,4 @@ class Texter(Client):
 if __name__ == '__main__':
     # good for testing - really high standard testing :/
     texter = Texter()
-    print(texter.send_text('fuck u u piz of shiiiiit', '333'))
+    print(texter.send_text('hello hello', '333'))
