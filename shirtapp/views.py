@@ -10,7 +10,6 @@ from django.utils.decorators import method_decorator
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.db.models.functions import TruncDate
-from django.db.models.lookups import DateTransform
 from pytz import timezone
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -58,7 +57,7 @@ def traffic_stats(request, template_name="traffic_stats.html"):
     View stats of traffic
     """
     hits = Hit.objects.distinct('ip_address')\
-        .annotate(hit_date=DateTransform('when'))\
+        .annotate(hit_date=TruncDate('when'))\
         .values('hit_date')\
         .annotate(hit_count=Count('ip_address'))
     return render(request, template_name, {"hits": hits})
