@@ -58,8 +58,9 @@ def traffic_stats(request, template_name="traffic_stats.html"):
     """
     hits = Hit.objects.annotate(hit_date=TruncDate('when'))\
         .values('hit_date')\
-        .annotate(hit_count=Count('ip_address'))
-    return render(request, template_name, {"hits": hits})
+        .annotate(hit_count=Count('ip_address'))\
+        .order_by('-hit_date')
+    return render(request, template_name, {"hits": hits[:30]})
 
 class ShirtViews(APIView):
     """

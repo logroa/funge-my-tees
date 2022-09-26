@@ -1,6 +1,6 @@
 {% block content %}
 <h1>FungeMyTees Traffic Stats</h1>
 {% for hit in hits %}
-    {{ hit }}
+    {{ hit.hit_date }} {{ hit.hit_count }}
 {% endfor %}
 {% endblock %}
