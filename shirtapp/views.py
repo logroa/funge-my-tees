@@ -56,8 +56,7 @@ def traffic_stats(request, template_name="traffic_stats.html"):
     """
     View stats of traffic
     """
-    hits = Hit.objects.distinct('ip_address')\
-        .annotate(hit_date=TruncDate('when'))\
+    hits = Hit.objects.annotate(hit_date=TruncDate('when'))\
         .values('hit_date')\
         .annotate(hit_count=Count('ip_address'))
     return render(request, template_name, {"hits": hits})
