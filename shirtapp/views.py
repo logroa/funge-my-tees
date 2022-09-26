@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class AdvocateViews(APIView):
     """
     API endpoint returning buyers.
@@ -35,6 +36,7 @@ class AdvocateViews(APIView):
         serializer = AdvocateSerializer(advos, many=True)
         return Response({"status": "success", "Access-Control-Allow-Origin": "*", "data": serializer.data}, status=status.HTTP_200_OK)   
 
+
 def add_hit(ip_address):
     """
     Adds IP Address of someone who viewed website to database
@@ -46,6 +48,14 @@ def add_hit(ip_address):
         print("Error: ", e)
         print("Missed this IP: ", ip_address)
     # probably some text functionality if a lot of traffic in one sitting right?
+
+
+def traffic_stats(request, template_name="traffic_stats.html"):
+    """
+    View stats of traffic
+    """
+    hits = Hit.objects.distinct('ip_address')
+    return render(request, template_name, {"hits": hits})
 
 class ShirtViews(APIView):
     """
@@ -85,6 +95,7 @@ class ShirtViews(APIView):
         shirt = get_object_or_404(Shirt, id=id)
         shirt.delete()
         return Response({"status": "success", "data": "Item Deleted"})
+
 
 class OrderViews(APIView):
     """
@@ -163,6 +174,7 @@ class OrderViews(APIView):
             print(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
 def confirm_order(request, order_uuid):
     """
     Handling order confirmation via text url.
@@ -181,6 +193,7 @@ def confirm_order(request, order_uuid):
         texter.send_text(f"Hmm weird order confirmation problem.", "9188845288")
 
     return HttpResponse('Thanks for confirming your order!')
+
 
 def order_stats(request, template_name='order_stats.html'):
     """
